@@ -34,10 +34,6 @@ or (b) emailing one of the repository managers (currently, Sam Lapp) with the de
 			`…`  
 		`…`
 
-`Terminology:`
-
-- `Event: a sound produced in the world and recorded on multiple microphones`  
-- `Synchronized: audio files have been post-processed so that they achieve precisely the nominal sample rate and start at precisely the expected time`
 
 Metadata contains a set of tables \- as in a “database”, some fields have to key into other tables as exact matches:
 
@@ -46,11 +42,16 @@ Metadata contains a set of tables \- as in a “database”, some fields have to
 
 Audio files are assumed to be “synchronized” in the sense that temporal correction data has been used to correct for clock drift. Varying levels of precision are required depending on the localization use case. 
 
-Organization of audio files within /audio/ folder is flexible. Each audio file will have a unique file\_id, and the audio\_file\_table.csv links the file\_id with its relative path and the point\_id where it was recorded.
+The organization of audio files within /audio/ folder is flexible. Each audio file will have a unique file\_id, and the audio\_file\_table.csv links the file\_id with its relative path and the point\_id where it was recorded.
+
+### Terminology:
+
+- `Event`: a sound produced in the world and recorded on multiple microphones
+- `Synchronized`: audio files have been post-processed so that they achieve precisely the nominal sample rate and start at precisely the expected time
 
 ## Top-level files
 
-`Event table (localized_events.csv)`
+### Event table (`localized_events.csv`)
 
 Columns:
 
@@ -79,13 +80,13 @@ Columns:
 
 Can add additional Boolean/categorical columns that describe validation checks performed on the event; e.g. species\_manually\_confirmed: True/False; 
 
-`Descriptive ReadMe File (readme.md)`
+### Descriptive ReadMe File (`readme.md`)
 
 Text file describing the purpose and design of the study and the procedure used to generate localizations, perform species detection, and synchronize the audio files.
 
 See the readme_template.md in this repository for a template to follow. Rename the file to simply `readme.md` in your dataset.
 
-`[optional] Classes (sound types) description (classes.csv)`
+### [optional] Classes (sound types) description (`classes.csv`)
 
 This optional file lists and describes all classes (sound types) that occur in the “label” column of localized\_events.csv. For instance, “Scarlet Tanager alarm call” might be one class. It can optionally include other columns that assist in the interpretation of the class or detail its taxonomy. If not included, be sure to describe the meaning of the values in “label” column of localized\_events.csv in the README.md file. 
 
@@ -96,24 +97,24 @@ Columns:
 - Optionally, include other fields. For instance `scientific_name`, `genus`, or `common_name`
 
 
-
 ## Scripts `subfolder (script/)`
 
-`All scripts used to produce the localized events (.py, .r, .rmd, .ipynb)`  
 Code scripts and notebooks (R, python,  etc) used to generate detections and localizations
 
 * If there is no hand-labeling or manual review of clips: should be able to re-create localized\_events.csv from these scripts  
 * If there is a hand-labeling/manual review step: include any scripts/workflows used to review events, e.g. if you used an interactive notebook, if you produced a table of events to exclude/include, etc.
 
-`Environment file(s)`  
+### Environment file(s) 
 Frozen Python environment files (.yml) listing package versions
 
-- If using the anaconda environment manager you can create this file with `conda env export -f myenv.yml` 
+> Tip: If using the Anaconda environment manager, you can create this file with `conda env export -f myenv.yml` 
 
 ## Localization metadata `subfolder (localization_metadata/)`
 
-`Point table (localization_metadata/point_table.csv)`  
-Columns: point\_id | utm\_easting | utm\_northing | elevation | utm\_zone   
+### Point table (`localization_metadata/point_table.csv`)  
+
+**Columns**: point\_id | utm\_easting | utm\_northing | elevation | utm\_zone 
+
 Tabulates the locations of all microphones. The coordinates (utm\_e, utm\_n, elevation, utm\_zone) refer to the position of the microphone; UTM coordinates have units of meters. Sometimes RTK provides two elevation measurements: Ellipsoidal\_Ht and Ortho\_Ht; in this case it is recommended to retain both as additional columns
 
 \[optional\] array : must include this column if multiple arrays are included in the localization dataset. Each array should have a unique alpha-numeric ID containing only letters, numbers, spaces, underscores 
@@ -126,22 +127,21 @@ recorder\_id column values match values in audio\_file\_table recorder\_id colum
 
 Additional columns such as notes, otho\_ht, ellipsoidal\_ht, can be included. 
 
-`Audio file table (localization_metadata/audio_file_table.csv)`  
+### Audio file table (`localization_metadata/audio_file_table.csv`)  
 file\_id | relative\_path  | point\_id  | start\_timestamp (ISO)
 
 - The relative path provides the path to the audio file relative to the top-level of the dataset, e.g. `/audio/recorder001/clip101.wav`  
 - point\_id matches a value of point\_id in the point\_table.csv, the location where the audio file was recorded
 
-`Project metadata and supplementary files`  
+### Project metadata and supplementary files
+
 These should be **sufficient to reproduce** the event\_table.csv from the contents of localization\_metadata and /audio/ (up to some human participation in the process).
 
-## Observed events `optional subfolder (ovserved_events/)`
-
-## 
+## Observed events `optional subfolder (observed_events/)`
 
 Subfolder containing records of events seen (or produced) in person with position estimates (accuracy of position estimates should go in README). All of these are optional. 
 
-`Acoustic playback experiments (bserved_events/playbacks.csv)`
+### Acoustic playback experiments (`observed_events/playbacks.csv`)
 
 Columns:
 
@@ -151,7 +151,7 @@ Columns:
 * duration: playback length in seconds  
 * position: playback position coordinate in UTM/meters: (utm x, utm y ,elevation, utm zone)
 
-`Field observations with positions (observed_events/observations.csv)`  
+### Field observations with positions (`observed_events/observations.csv`)
 table of human field observation of acoustic events with known positions
 
 Columns:
@@ -164,7 +164,8 @@ Columns:
 * comments  
 * \[optional\]: direction (degrees CW from N): orientation of animal when sound was produced
 
-Can include files for other observation types, such as:
+### Other observation records
+Optionally, include files for other observation types, such as:
 
 - Spot mapping  
 - Point count survey  
